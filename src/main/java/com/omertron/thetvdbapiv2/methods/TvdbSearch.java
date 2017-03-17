@@ -32,4 +32,9 @@ public class TvdbSearch extends AbstractMethod {
         super(apiKey, httpTools);
     }
 
+    /**
+     * Allows the user to search for a series based on the parameters
+     */
+    public void series() {
+    }
 }

@@ -30,7 +30,7 @@ import static org.junit.Assert.fail;
 
 public class AbstractTests {
 
-    protected static final Logger LOG = LoggerFactory.getLogger(AbstractTests.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractTests.class);
     private static final String PROP_FILENAME = "testing.properties";
     private static final Properties PROPS = new Properties();
     private static HttpClient httpClient;

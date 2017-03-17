@@ -32,4 +32,20 @@ public class TvdbLanguages extends AbstractMethod {
         super(apiKey, httpTools);
     }
 
+    /**
+     * All available languages.
+     * <p>
+     * These language abbreviations can be used in the Accept-Language header
+     * for routes that return translation records
+     */
+    public void languages() {
+    }
+
+    /**
+     * Information about a particular language, given the language ID
+     *
+     * @param id
+     */
+    public void languages(int id) {
+    }
 }

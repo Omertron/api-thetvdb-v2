@@ -19,36 +19,47 @@
  */
 package com.omertron.thetvdbapiv2.methods;
 
-import com.omertron.thetvdbapiv2.tools.HttpTools;
+import com.omertron.thetvdbapiv2.AbstractTests;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.fail;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Authentication: Obtaining and refreshing your JWT token
  *
- * @author Omertron
+ * @author stuar
  */
-public class TvdbAuthentication extends AbstractMethod {
+public class TvdbUpdatesTest extends AbstractTests {
 
-    public TvdbAuthentication(String apiKey, HttpTools httpTools) {
-        super(apiKey, httpTools);
+    private static final Logger LOG = LoggerFactory.getLogger(TvdbUpdatesTest.class);
+
+    public TvdbUpdatesTest() {
     }
 
-    /**
-     * Returns a session token to be included in the rest of the requests.
-     * <p>
-     * Note that API key authentication is required for all subsequent requests
-     * and user auth is required for routes in the User section
-     *
-     */
-    public void login() {
+    @BeforeClass
+    public static void setUpClass() {
     }
 
-    /**
-     * Refreshes your current, valid JWT token and returns a new token.
-     * <p>
-     * Hit this route so that you do not have to post to /login with your API
-     * key and credentials once you have already been authenticated.
-     *
-     */
-    public void refreshToken() {
+    @AfterClass
+    public static void tearDownClass() {
     }
+
+    @Before
+    public void setUp() {
+    }
+
+    @After
+    public void tearDown() {
+    }
+
+    @Test
+    public void testSomeMethod() {
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
 }

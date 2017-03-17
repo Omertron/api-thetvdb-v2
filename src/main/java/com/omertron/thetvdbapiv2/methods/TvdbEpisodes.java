@@ -32,4 +32,9 @@ public class TvdbEpisodes extends AbstractMethod {
         super(apiKey, httpTools);
     }
 
+    /**
+     * Returns the full information for a given episode id.
+     */
+    public void episodes() {
+    }
 }
