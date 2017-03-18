@@ -28,8 +28,8 @@ import com.omertron.thetvdbapiv2.tools.HttpTools;
  */
 public class TvdbUsers extends AbstractMethod {
 
-    public TvdbUsers(String apiKey, HttpTools httpTools) {
-        super(apiKey, httpTools);
+    public TvdbUsers(HttpTools httpTools) {
+        super(httpTools);
     }
 
 }

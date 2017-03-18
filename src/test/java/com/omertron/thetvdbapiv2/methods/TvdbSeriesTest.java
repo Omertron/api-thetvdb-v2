@@ -45,7 +45,7 @@ public class TvdbSeriesTest extends AbstractTests {
     @BeforeClass
     public static void setUpClass() throws TvDbException {
         doConfiguration();
-        instance = new TvdbSeries(getApiKey(), getHttpTools());
+        instance = new TvdbSeries(getHttpTools());
     }
 
     @AfterClass
@@ -65,7 +65,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testSeries() {
-        System.out.println("series");
+        LOG.info("series");
         long id = 0L;
         instance.series(id);
         // TODO review the generated test code and remove the default call to fail.
@@ -77,7 +77,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testSeriesHead() {
-        System.out.println("seriesHead");
+        LOG.info("seriesHead");
         long id = 0L;
         TvdbSeries instance = null;
         instance.seriesHead(id);
@@ -90,7 +90,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testActors() {
-        System.out.println("actors");
+        LOG.info("actors");
         long id = 0L;
         TvdbSeries instance = null;
         instance.actors(id);
@@ -103,7 +103,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testEpisodes() {
-        System.out.println("episodes");
+        LOG.info("episodes");
         long id = 0L;
         TvdbSeries instance = null;
         instance.episodes(id);
@@ -116,7 +116,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testEpisodesQuery() {
-        System.out.println("episodesQuery");
+        LOG.info("episodesQuery");
         long id = 0L;
         TvdbSeries instance = null;
         instance.episodesQuery(id);
@@ -129,7 +129,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testEpisodesQueryParams() {
-        System.out.println("episodesQueryParams");
+        LOG.info("episodesQueryParams");
         TvdbSeries instance = null;
         instance.episodesQueryParams();
         // TODO review the generated test code and remove the default call to fail.
@@ -141,7 +141,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testEpisodesSummary() {
-        System.out.println("episodesSummary");
+        LOG.info("episodesSummary");
         long id = 0L;
         TvdbSeries instance = null;
         instance.episodesSummary(id);
@@ -154,7 +154,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testFilter() {
-        System.out.println("filter");
+        LOG.info("filter");
         long id = 0L;
         TvdbSeries instance = null;
         instance.filter(id);
@@ -167,7 +167,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testFilterParams() {
-        System.out.println("filterParams");
+        LOG.info("filterParams");
         long id = 0L;
         TvdbSeries instance = null;
         instance.filterParams(id);
@@ -180,7 +180,7 @@ public class TvdbSeriesTest extends AbstractTests {
      */
     @Test
     public void testImages() {
-        System.out.println("images");
+        LOG.info("images");
         long id = 0L;
         TvdbSeries instance = null;
         instance.images(id);

@@ -23,6 +23,7 @@ import com.omertron.thetvdbapiv2.AbstractTests;
 import com.omertron.thetvdbapiv2.TvDbException;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -45,7 +46,7 @@ public class TvdbEpisodesTest extends AbstractTests {
     @BeforeClass
     public static void setUpClass() throws TvDbException {
         doConfiguration();
-        instance = new TvdbEpisodes(getApiKey(), getHttpTools());
+        instance = new TvdbEpisodes(getHttpTools());
     }
 
     @AfterClass
@@ -62,11 +63,31 @@ public class TvdbEpisodesTest extends AbstractTests {
 
     /**
      * Test of episodes method, of class TvdbEpisodes.
+     * @throws java.lang.Exception
+     */
+//    @Test
+    public void testEpisodes_long() throws Exception {
+        LOG.info("episodes");
+        long id = 70726L;
+        String expResult = "";
+        String result = instance.episodes(id);
+        assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of episodes method, of class TvdbEpisodes.
+     * @throws java.lang.Exception
      */
     @Test
-    public void testEpisodes() {
-        System.out.println("episodes");
-        instance.episodes();
+    public void testEpisodes_long_String() throws Exception {
+        LOG.info("episodes");
+        long id = 70726L;
+        String language = "";
+        String expResult = "";
+        String result = instance.episodes(id, language);
+        assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

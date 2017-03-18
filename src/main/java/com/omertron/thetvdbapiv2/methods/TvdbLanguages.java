@@ -28,8 +28,8 @@ import com.omertron.thetvdbapiv2.tools.HttpTools;
  */
 public class TvdbLanguages extends AbstractMethod {
 
-    public TvdbLanguages(String apiKey, HttpTools httpTools) {
-        super(apiKey, httpTools);
+    public TvdbLanguages(HttpTools httpTools) {
+        super(httpTools);
     }
 
     /**

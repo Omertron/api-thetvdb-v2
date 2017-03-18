@@ -12,3 +12,5 @@
 hs_err_pid*
 /nb-configuration.xml
 /nbproject/
+/target/
+/testing.properties

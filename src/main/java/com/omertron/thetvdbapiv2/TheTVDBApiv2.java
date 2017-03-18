@@ -26,8 +26,11 @@ import com.omertron.thetvdbapiv2.methods.TvdbSearch;
 import com.omertron.thetvdbapiv2.methods.TvdbSeries;
 import com.omertron.thetvdbapiv2.methods.TvdbUpdates;
 import com.omertron.thetvdbapiv2.methods.TvdbUsers;
+import com.omertron.thetvdbapiv2.model.AuthenticationToken;
 import com.omertron.thetvdbapiv2.tools.HttpTools;
 import org.apache.http.client.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yamj.api.common.http.SimpleHttpClientBuilder;
 
 /**
@@ -39,6 +42,7 @@ import org.yamj.api.common.http.SimpleHttpClientBuilder;
  */
 public class TheTVDBApiv2 {
 
+    private static final Logger LOG = LoggerFactory.getLogger(TheTVDBApiv2.class);
     private HttpTools httpTools;
     // Methods
     private static TvdbAuthentication tvdbAuthentication;
@@ -51,24 +55,48 @@ public class TheTVDBApiv2 {
 
     /**
      * The TVDB API v2
+     * <p>
+     * You must call the "login" method with your credentials and then use the resulting token to call the "authenticate"
+     * method.<br>
+     * This will allow access to the rest of the API methods
      *
-     * @param apiKey
      * @throws TvDbException
      */
-    public TheTVDBApiv2(String apiKey) throws TvDbException {
-        this(apiKey, new SimpleHttpClientBuilder().build());
+    public TheTVDBApiv2() throws TvDbException {
+        this(new SimpleHttpClientBuilder().build());
     }
 
     /**
      * The TVDB API v2
      *
-     * @param apiKey
      * @param httpClient
      * @throws TvDbException
      */
-    public TheTVDBApiv2(String apiKey, HttpClient httpClient) throws TvDbException {
+    public TheTVDBApiv2(HttpClient httpClient) throws TvDbException {
         this.httpTools = new HttpTools(httpClient);
-        initialise(apiKey, httpTools);
+
+        tvdbAuthentication = new TvdbAuthentication(httpTools);
+    }
+
+    /**
+     * Authenticates all other methods with the token.
+     * <p>
+     * This MUST be done before any of the other methods are used
+     *
+     * @param token
+     */
+    public void authenticate(AuthenticationToken token) {
+        initialiseMethods(httpTools);
+        authenticateMethods(token);
+    }
+
+    /**
+     * Update the authentication token
+     *
+     * @param token
+     */
+    public void reAuthenticate(AuthenticationToken token) {
+        authenticateMethods(token);
     }
 
     /**
@@ -77,15 +105,27 @@ public class TheTVDBApiv2 {
      * @param apiKey
      * @param httpTools
      */
-    private void initialise(String apiKey, HttpTools httpTools) {
-        tvdbAuthentication = new TvdbAuthentication(apiKey, httpTools);
-        tvdbEpisodes = new TvdbEpisodes(apiKey, httpTools);
-        tvdbLanguages = new TvdbLanguages(apiKey, httpTools);
-        tvdbSearch = new TvdbSearch(apiKey, httpTools);
-        tvdbSeries = new TvdbSeries(apiKey, httpTools);
-        tvdbUpdates = new TvdbUpdates(apiKey, httpTools);
-        tvdbUsers = new TvdbUsers(apiKey, httpTools);
+    private void initialiseMethods(HttpTools httpTools) {
+        tvdbEpisodes = new TvdbEpisodes(httpTools);
+        tvdbLanguages = new TvdbLanguages(httpTools);
+        tvdbSearch = new TvdbSearch(httpTools);
+        tvdbSeries = new TvdbSeries(httpTools);
+        tvdbUpdates = new TvdbUpdates(httpTools);
+        tvdbUsers = new TvdbUsers(httpTools);
     }
 
-    
+    /**
+     * Add/Update the authentication token for all the methods
+     *
+     * @param token
+     */
+    private void authenticateMethods(AuthenticationToken token) {
+        tvdbEpisodes.setAuthToken(token);
+        tvdbLanguages.setAuthToken(token);
+        tvdbSearch.setAuthToken(token);
+        tvdbSeries.setAuthToken(token);
+        tvdbUpdates.setAuthToken(token);
+        tvdbUsers.setAuthToken(token);
+    }
+
 }

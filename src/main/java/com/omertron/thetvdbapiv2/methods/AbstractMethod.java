@@ -22,9 +22,14 @@ package com.omertron.thetvdbapiv2.methods;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.omertron.thetvdbapiv2.TvDbException;
+import com.omertron.thetvdbapiv2.model.AuthenticationToken;
 import com.omertron.thetvdbapiv2.tools.HttpTools;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
@@ -33,10 +38,13 @@ import org.yamj.api.common.exception.ApiExceptionType;
  */
 public class AbstractMethod {
 
-    // The API key to be used
-    protected final String apiKey;
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractMethod.class);
+    // API URL
+    private static final String API_URL = "https://api.thetvdb.com/";
     // The HttpTools to use
     protected final HttpTools httpTools;
+    // The authentication token
+    protected AuthenticationToken authToken;
     // Jackson JSON configuration
     protected static final ObjectMapper MAPPER = new ObjectMapper();
     private static final Map<Class, TypeReference> TYPE_REFS = new HashMap<>();
@@ -51,8 +59,7 @@ public class AbstractMethod {
      * @param apiKey
      * @param httpTools
      */
-    public AbstractMethod(String apiKey, HttpTools httpTools) {
-        this.apiKey = apiKey;
+    public AbstractMethod(HttpTools httpTools) {
         this.httpTools = httpTools;
     }
 
@@ -61,6 +68,7 @@ public class AbstractMethod {
      *
      * @param aClass
      * @return
+     * @throws com.omertron.thetvdbapiv2.TvDbException
      * @throws MovieDbException
      */
     protected static TypeReference getTypeReference(Class aClass) throws TvDbException {
@@ -71,4 +79,47 @@ public class AbstractMethod {
         }
     }
 
+    /**
+     * Get the authentication token for the session
+     *
+     * @return
+     * @throws TvDbException
+     */
+    public AuthenticationToken getAuthToken() throws TvDbException {
+        if (authToken == null) {
+            throw new TvDbException(ApiExceptionType.AUTH_FAILURE, "No/Invalid Authentication Token");
+        }
+        return authToken;
+    }
+
+    /**
+     * Set the authentication token to be used throughout the session
+     *
+     * @param authToken
+     */
+    public void setAuthToken(AuthenticationToken authToken) {
+        this.authToken = authToken;
+    }
+
+    /**
+     * Create a URL to the API calls
+     *
+     * @param methodPath
+     * @param param
+     * @return
+     * @throws TvDbException
+     */
+    protected URL generateUrl(final String methodPath, final Object param) throws TvDbException {
+        StringBuilder builder = new StringBuilder(API_URL);
+        builder.append(methodPath).append("/");
+        builder.append(param.toString());
+        LOG.info("URL: {}", builder.toString());
+
+        try {
+            return new URL(builder.toString());
+        } catch (MalformedURLException ex) {
+            LOG.warn("Failed to convert '{}' into a URL", builder.toString());
+            throw new TvDbException(ApiExceptionType.INVALID_URL, ex.getMessage(), builder.toString(), ex);
+        }
+    }
 }

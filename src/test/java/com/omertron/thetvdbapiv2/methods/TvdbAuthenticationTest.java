@@ -21,9 +21,12 @@ package com.omertron.thetvdbapiv2.methods;
 
 import com.omertron.thetvdbapiv2.AbstractTests;
 import com.omertron.thetvdbapiv2.TvDbException;
+import com.omertron.thetvdbapiv2.model.AuthenticationToken;
 import org.junit.After;
 import org.junit.AfterClass;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -41,7 +44,7 @@ public class TvdbAuthenticationTest extends AbstractTests {
     @BeforeClass
     public static void setUpClass() throws TvDbException {
         doConfiguration();
-        instance = new TvdbAuthentication(getApiKey(), getHttpTools());
+        instance = new TvdbAuthentication(getHttpTools());
     }
 
     @AfterClass
@@ -58,24 +61,33 @@ public class TvdbAuthenticationTest extends AbstractTests {
 
     /**
      * Test of login method, of class TvdbAuthentication.
+     *
+     * @throws com.omertron.thetvdbapiv2.TvDbException
      */
     @Test
-    public void testLogin() {
+    public void testLogin() throws TvDbException {
         LOG.info("login");
-        instance.login();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        AuthenticationToken token = instance.login(getApiKey(), getUserKey(), null);
+        LOG.info("{}", token.toString());
+
+        assertNotNull("No token", token.getToken());
+        assertTrue("No token", !token.getToken().isEmpty());
     }
 
     /**
      * Test of refreshToken method, of class TvdbAuthentication.
+     *
+     * @throws com.omertron.thetvdbapiv2.TvDbException
      */
     @Test
-    public void testRefreshToken() {
+    public void testRefreshToken() throws TvDbException {
         LOG.info("refreshToken");
-        instance.refreshToken();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+        AuthenticationToken token = instance.login(getProperty(PROP_APIKEY), getProperty(PROP_USERKEY), null);
+        LOG.info("1st Token: {}", token.getToken());
+        AuthenticationToken newToken = instance.refreshToken(token);
+        LOG.info("2nd Token: {}", newToken.getToken());
+        assertNotEquals("Same token returned", token.getToken(), newToken.getToken());
     }
 
 }

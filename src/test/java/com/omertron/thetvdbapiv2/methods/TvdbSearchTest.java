@@ -45,7 +45,7 @@ public class TvdbSearchTest extends AbstractTests {
     @BeforeClass
     public static void setUpClass() throws TvDbException {
         doConfiguration();
-        instance = new TvdbSearch(getApiKey(), getHttpTools());
+        instance = new TvdbSearch(getHttpTools());
     }
 
     @AfterClass
@@ -65,7 +65,7 @@ public class TvdbSearchTest extends AbstractTests {
      */
     @Test
     public void testSeries() {
-        System.out.println("series");
+        LOG.info("series");
         instance.series();
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -45,7 +45,7 @@ public class TvdbLanguagesTest extends AbstractTests {
     @BeforeClass
     public static void setUpClass() throws TvDbException {
         doConfiguration();
-        instance = new TvdbLanguages(getApiKey(), getHttpTools());
+        instance = new TvdbLanguages(getHttpTools());
     }
 
     @AfterClass
@@ -65,7 +65,7 @@ public class TvdbLanguagesTest extends AbstractTests {
      */
     @Test
     public void testLanguages() {
-        System.out.println("languages");
+        LOG.info("languages");
         TvdbLanguages instance = null;
         instance.languages();
         // TODO review the generated test code and remove the default call to fail.
@@ -77,7 +77,7 @@ public class TvdbLanguagesTest extends AbstractTests {
      */
     @Test
     public void testLanguages_int() {
-        System.out.println("languages");
+        LOG.info("languages");
         int id = 0;
         TvdbLanguages instance = null;
         instance.languages(id);

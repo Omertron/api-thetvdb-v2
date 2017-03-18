@@ -28,8 +28,8 @@ import com.omertron.thetvdbapiv2.tools.HttpTools;
  */
 public class TvdbSearch extends AbstractMethod {
 
-    public TvdbSearch(String apiKey, HttpTools httpTools) {
-        super(apiKey, httpTools);
+    public TvdbSearch(HttpTools httpTools) {
+        super(httpTools);
     }
 
     /**

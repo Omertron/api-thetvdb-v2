@@ -17,19 +17,26 @@
  *      along with TheTVDB API.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-package com.omertron.thetvdbapiv2.methods;
+package com.omertron.thetvdbapiv2.model;
 
-import com.omertron.thetvdbapiv2.tools.HttpTools;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Updates: Series that have been recently updated
- *
- * @author Omertron
- */
-public class TvdbUpdates extends AbstractMethod {
+public class AuthenticationToken extends AbstractJsonMapping {
 
-    public TvdbUpdates(HttpTools httpTools) {
-        super(httpTools);
+    private static final long serialVersionUID = 100L;
+    @JsonProperty("token")
+    private String token;
+
+    public AuthenticationToken() {
+        // Default constructor
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }

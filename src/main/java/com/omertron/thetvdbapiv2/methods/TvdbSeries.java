@@ -28,13 +28,12 @@ import com.omertron.thetvdbapiv2.tools.HttpTools;
  */
 public class TvdbSeries extends AbstractMethod {
 
-    public TvdbSeries(String apiKey, HttpTools httpTools) {
-        super(apiKey, httpTools);
+    public TvdbSeries(HttpTools httpTools) {
+        super(httpTools);
     }
 
     /**
-     * Returns a series records that contains all information known about a
-     * particular series id.
+     * Returns a series records that contains all information known about a particular series id.
      *
      * @param id ID of the series
      */
@@ -70,8 +69,7 @@ public class TvdbSeries extends AbstractMethod {
     /**
      * Query against episodes for the given series ID.
      * <p>
-     * The response is a paginated array of episode records that have been
-     * filtered down to basic information.
+     * The response is a paginated array of episode records that have been filtered down to basic information.
      *
      * @param id ID of the series
      */
@@ -94,8 +92,7 @@ public class TvdbSeries extends AbstractMethod {
     }
 
     /**
-     * Returns a series records, filtered by the supplied comma-separated list
-     * of keys.
+     * Returns a series records, filtered by the supplied comma-separated list of keys.
      * <p>
      * Query keys can be found at the filterParams.
      *
