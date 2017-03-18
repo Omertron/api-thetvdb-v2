@@ -67,7 +67,7 @@ public class TvdbAuthenticationTest extends AbstractTests {
     @Test
     public void testLogin() throws TvDbException {
         LOG.info("login");
-        AuthenticationToken token = instance.login(getApiKey(), getUserKey(), null);
+        AuthenticationToken token = instance.login(getProperty(PROP_APIKEY), getProperty(PROP_USERKEY), null);
         LOG.info("{}", token.toString());
 
         assertNotNull("No token", token.getToken());
