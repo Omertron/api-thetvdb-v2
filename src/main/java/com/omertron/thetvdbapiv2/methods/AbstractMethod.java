@@ -28,13 +28,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.http.HttpHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yamj.api.common.exception.ApiExceptionType;
 
 /**
  *
- * @author stuar
+ * @author Omertron
  */
 public class AbstractMethod {
 
@@ -111,8 +112,12 @@ public class AbstractMethod {
      */
     protected URL generateUrl(final String methodPath, final Object param) throws TvDbException {
         StringBuilder builder = new StringBuilder(API_URL);
-        builder.append(methodPath).append("/");
-        builder.append(param.toString());
+        builder.append(methodPath);
+
+        if (param != null) {
+            builder.append("/")
+                    .append(param.toString());
+        }
         LOG.info("URL: {}", builder.toString());
 
         try {
@@ -121,5 +126,15 @@ public class AbstractMethod {
             LOG.warn("Failed to convert '{}' into a URL", builder.toString());
             throw new TvDbException(ApiExceptionType.INVALID_URL, ex.getMessage(), builder.toString(), ex);
         }
+    }
+
+    protected String getJsonData(URL url) throws TvDbException {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(HttpHeaders.AUTHORIZATION, "Bearer " + getAuthToken().getToken());
+
+        String result = httpTools.postRequest(url, null, headers);
+        LOG.info(result);
+
+        return result;
     }
 }
