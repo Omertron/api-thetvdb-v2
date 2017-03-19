@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -26,6 +28,7 @@ import org.yamj.api.common.http.DigestedResponseReader;
  */
 public class HttpTools {
 
+//    private static final Logger LOG = LoggerFactory.getLogger(HttpTools.class);
     private final HttpClient httpClient;
     private static final Charset CHARSET = Charset.forName("UTF-8");
     private static final String APPLICATION_JSON = "application/json";
@@ -106,12 +109,35 @@ public class HttpTools {
      * @throws TvDbException
      */
     public String postRequest(final URL url, final String jsonBody) throws TvDbException {
+        return postRequest(url, jsonBody, null);
+    }
+
+    /**
+     * POST content to the URL with the specified body
+     *
+     * @param url URL to use in the request
+     * @param jsonBody Body to use in the request
+     * @param headers Additional headers to use
+     * @return String content
+     * @throws TvDbException
+     */
+    public String postRequest(final URL url, final String jsonBody, final Map<String, String> headers) throws TvDbException {
         try {
             HttpPost httpPost = new HttpPost(url.toURI());
             httpPost.addHeader(HTTP.CONTENT_TYPE, APPLICATION_JSON);
             httpPost.addHeader(HttpHeaders.ACCEPT, APPLICATION_JSON);
-            StringEntity params = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
-            httpPost.setEntity(params);
+
+            // Add any additional headers if needed
+            if (headers != null) {
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    httpPost.addHeader(header.getKey(), header.getValue());
+                }
+            }
+
+            if (StringUtils.isNotBlank(jsonBody)) {
+                StringEntity params = new StringEntity(jsonBody, ContentType.APPLICATION_JSON);
+                httpPost.setEntity(params);
+            }
 
             return validateResponse(DigestedResponseReader.postContent(httpClient, httpPost, CHARSET), url);
         } catch (URISyntaxException | IOException ex) {
@@ -130,6 +156,8 @@ public class HttpTools {
     private String validateResponse(final DigestedResponse response, final URL url) throws TvDbException {
         if (response.getStatusCode() == 0) {
             throw new TvDbException(ApiExceptionType.CONNECTION_ERROR, response.getContent(), response.getStatusCode(), url, null);
+        } else if (response.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+            throw new TvDbException(ApiExceptionType.AUTH_FAILURE, response.getContent(), response.getStatusCode(), url, null);
         } else if (response.getStatusCode() >= HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             throw new TvDbException(ApiExceptionType.HTTP_503_ERROR, response.getContent(), response.getStatusCode(), url, null);
         } else if (response.getStatusCode() >= HttpStatus.SC_MULTIPLE_CHOICES) {
