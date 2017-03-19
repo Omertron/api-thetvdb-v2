@@ -79,14 +79,18 @@ public class TvdbAuthenticationTest extends AbstractTests {
      *
      * @throws com.omertron.thetvdbapiv2.TvDbException
      */
-    @Test
+//    @Test
     public void testRefreshToken() throws TvDbException {
         LOG.info("refreshToken");
 
         AuthenticationToken token = instance.login(getProperty(PROP_APIKEY), getProperty(PROP_USERKEY), null);
+        instance.setAuthToken(token);
         LOG.info("1st Token: {}", token.getToken());
         AuthenticationToken newToken = instance.refreshToken(token);
         LOG.info("2nd Token: {}", newToken.getToken());
+
+        assertNotNull("1st token is null", token.getToken());
+        assertNotNull("2nd token is null", newToken.getToken());
         assertNotEquals("Same token returned", token.getToken(), newToken.getToken());
     }
 

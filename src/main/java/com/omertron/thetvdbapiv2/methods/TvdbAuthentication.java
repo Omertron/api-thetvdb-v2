@@ -21,6 +21,7 @@ package com.omertron.thetvdbapiv2.methods;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.omertron.thetvdbapiv2.TvDbException;
+import com.omertron.thetvdbapiv2.TvdbMethods;
 import com.omertron.thetvdbapiv2.model.Authentication;
 import com.omertron.thetvdbapiv2.model.AuthenticationToken;
 import com.omertron.thetvdbapiv2.tools.HttpTools;
@@ -57,28 +58,27 @@ public class TvdbAuthentication extends AbstractMethod {
      * @throws com.omertron.thetvdbapiv2.TvDbException
      */
     public AuthenticationToken login(final String apikey, final String userkey, final String username) throws TvDbException {
-        String urlString = "https://api.thetvdb.com/login";
+        URL url = generateUrl(TvdbMethods.LOGIN, null);
+
         try {
             Authentication auth = new Authentication(apikey, userkey, username);
-            String authJson = MAPPER.writeValueAsString(auth);
+            String jsonAuth = MAPPER.writeValueAsString(auth);
+            String jsonData = httpTools.postRequest(url, jsonAuth);
 
-            URL url = new URL(urlString);
-            String webpage = httpTools.postRequest(url, authJson);
-
-            AuthenticationToken token = MAPPER.readValue(webpage, AuthenticationToken.class);
+            AuthenticationToken token = MAPPER.readValue(jsonData, AuthenticationToken.class);
             return token;
         } catch (JsonProcessingException ex) {
             LOG.warn("Failed to process JSON from TheTVDB");
-            throw new TvDbException(ApiExceptionType.MAPPING_FAILED, ex.getMessage(), urlString, ex);
+            throw new TvDbException(ApiExceptionType.MAPPING_FAILED, ex.getMessage(), url.toString(), ex);
         } catch (MalformedURLException ex) {
             LOG.warn("Faied to create URL");
-            throw new TvDbException(ApiExceptionType.INVALID_URL, ex.getMessage(), urlString, ex);
+            throw new TvDbException(ApiExceptionType.INVALID_URL, ex.getMessage(), url.toString(), ex);
         } catch (IOException ex) {
             LOG.warn("Failed to get URL data");
-            throw new TvDbException(ApiExceptionType.INVALID_URL, ex.getMessage(), urlString, ex);
+            throw new TvDbException(ApiExceptionType.INVALID_URL, ex.getMessage(), url.toString(), ex);
         } catch (TvDbException ex) {
             LOG.warn("Failed to get web data");
-            throw new TvDbException(ApiExceptionType.CONNECTION_ERROR, ex.getMessage(), urlString, ex);
+            throw new TvDbException(ApiExceptionType.CONNECTION_ERROR, ex.getMessage(), url.toString(), ex);
         }
     }
 
@@ -90,9 +90,17 @@ public class TvdbAuthentication extends AbstractMethod {
      *
      * @param token
      * @return
+     * @throws com.omertron.thetvdbapiv2.TvDbException
      */
-    public AuthenticationToken refreshToken(final AuthenticationToken token) {
+    public AuthenticationToken refreshToken(final AuthenticationToken token) throws TvDbException {
+        URL url = generateUrl(TvdbMethods.REFRESH_TOKEN, null);
+        String jsonData = getJsonData(url);
 
-        return new AuthenticationToken();
+        try {
+            return MAPPER.readValue(jsonData, AuthenticationToken.class);
+        } catch (IOException ex) {
+            LOG.warn("Failed to get URL data");
+            throw new TvDbException(ApiExceptionType.INVALID_URL, ex.getMessage(), url.toString(), ex);
+        }
     }
 }
